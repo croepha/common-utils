@@ -23,6 +23,13 @@ func New(writer io.Writer, indentLevel int) fmtWrapper {
 // TODO: Automatically add space to seperate fields? Or actually maybe an option to trim redundant space?
 // TODO: Custom prefix?
 
+// TODO: There may also be other interesting stuff we could do with output
+// like printing tables, color formatting...
+
+// TODO: Generally not checking errors on output write.
+//   We could check for errors, and perhaps panic, but generally it's
+//   assumed that write will not error
+
 func (f *fmtWrapper) F(format string, a ...any) {
 	prefix := strings.Repeat("  ", f.indentLevel)
 
