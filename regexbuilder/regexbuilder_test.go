@@ -22,6 +22,6 @@ func TestBasic(t *testing.T) {
 	require.Equal(t, true, exampleRegex.MatchString(`match this exactly.***!!!`))
 
 	m0 := exampleRegex.FindStringSubmatch("qwerq werq werqw er captureThisNumber:1234 qwqwerqwer qwe qwerqwe q qwer")
-	require.Equal(t, "1234", m0[1])
+	require.Equal(t, "1234", m0[numberIdx])
 
 }

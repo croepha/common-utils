@@ -3,6 +3,7 @@ package regexbuilder
 import (
 	"fmt"
 	"regexp"
+	"slices"
 	"sync/atomic"
 )
 
@@ -38,7 +39,6 @@ and the functions would get called on match.  Note: unfortunately, this would st
 
 // Adds a group, idxBind is set to the group index on Compile
 func (b PatternBuilder) G(idxBind *int, pattern PatternBuilder) PatternBuilder {
-	b.addGroups()
 	pattern.DebugCheck()
 	if idxBind == nil {
 		panic("idxBind")
@@ -65,10 +65,7 @@ type addedGroup struct {
 }
 
 func (b PatternBuilder) addGroups(groups ...addedGroup) PatternBuilder {
-	existingGroups := b.groups
-	b.groups = nil // Force a new slice
-	b.groups = append(b.groups, existingGroups...)
-	b.groups = append(b.groups, groups...)
+	b.groups = slices.Concat(b.groups, groups)
 	return b
 }
 
@@ -101,13 +98,11 @@ func (b PatternBuilder) Q(s string) PatternBuilder {
 
 // Append to the pattern the literal string, (this escapes/quotes the []byte)
 func (b PatternBuilder) QQ(s []byte) PatternBuilder {
-	b.addGroups()
 	return b.Q(string(s))
 }
 
 // Alternations, adds a set of patterns to match. ie `(?:alts0|alts1,altsn...)`
 func (b PatternBuilder) A(alts ...PatternBuilder) PatternBuilder {
-	b.addGroups()
 	b = b.R(`(?:`)
 	for i, alt := range alts {
 		if i != 0 {
