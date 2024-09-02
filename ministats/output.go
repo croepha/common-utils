@@ -2,6 +2,7 @@ package ministats
 
 import "log/slog"
 
+// Output implementation that outputs to a given slog.Logger
 type SlogOutput struct {
 	Logger *slog.Logger
 }
